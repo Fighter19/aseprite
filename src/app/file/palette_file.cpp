@@ -16,6 +16,7 @@
 #include "base/fs.h"
 #include "base/string.h"
 #include "doc/cel.h"
+#include "doc/file/clr_file.h"
 #include "doc/file/col_file.h"
 #include "doc/file/gpl_file.h"
 #include "doc/file/hex_file.h"
@@ -35,14 +36,14 @@ using namespace doc;
 std::string get_readable_palette_extensions()
 {
   std::string buf = get_readable_extensions();
-  buf += ",col,gpl,hex,pal";
+  buf += ",clr,col,gpl,hex,pal";
   return buf;
 }
 
 std::string get_writable_palette_extensions()
 {
   std::string buf = get_writable_extensions();
-  buf += ",col,gpl,hex,pal";
+  buf += ",clr,col,gpl,hex,pal";
   return buf;
 }
 
@@ -52,6 +53,10 @@ Palette* load_palette(const char* filename)
   Palette* pal = nullptr;
 
   switch (dioFormat) {
+
+    case dio::FileFormat::CLR_PALETTE:
+      pal = doc::file::load_clr_file(filename);
+      break;
 
     case dio::FileFormat::COL_PALETTE:
       pal = doc::file::load_col_file(filename);
@@ -68,6 +73,7 @@ Palette* load_palette(const char* filename)
     case dio::FileFormat::PAL_PALETTE:
       pal = doc::file::load_pal_file(filename);
       break;
+
 
     default: {
       FileFormat* ff = FileFormatsManager::instance()->getFileFormat(dioFormat);
@@ -110,6 +116,10 @@ bool save_palette(const char* filename, const Palette* pal, int columns)
   bool success = false;
 
   switch (dioFormat) {
+
+    case dio::FileFormat::CLR_PALETTE:
+	  success = doc::file::save_clr_file(pal, filename);
+	  break;
 
     case dio::FileFormat::COL_PALETTE:
       success = doc::file::save_col_file(pal, filename);
