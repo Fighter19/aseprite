@@ -28,6 +28,7 @@ enum class FileFormat {
   PAL_PALETTE,
   PCX_IMAGE,
   PNG_IMAGE,
+  SNES_IMAGE,
   TARGA_IMAGE,
   WEBP_ANIMATION,
 };
